@@ -1,5 +1,0 @@
-package jaeger
-
-func SetTracerProvider() {
-
-}

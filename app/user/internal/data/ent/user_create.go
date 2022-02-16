@@ -207,7 +207,7 @@ func (uc *UserCreate) defaults() {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
+// check runs all checks and service-defined validators on the builder.
 func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "User.name"`)}

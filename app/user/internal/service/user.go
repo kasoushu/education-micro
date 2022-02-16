@@ -2,14 +2,14 @@ package service
 
 import (
 	"context"
-	v1 "education/api/user/v1"
+	"education/api/v1/user"
 	"education/app/user/internal/model"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
 type UserService struct {
-	v1.UnimplementedUserServer
+	user.UnimplementedUserServer
 	uc  UserCase
 	log *log.Helper
 }
@@ -25,13 +25,13 @@ type UserCase interface {
 func NewUserService(u UserCase, l log.Logger) *UserService {
 	return &UserService{
 		uc:  u,
-		log: log.NewHelper(log.With(l, "module", "user-service")),
+		log: log.NewHelper(log.With(l, "module", "service-service")),
 	}
 }
 
 //
 
-func (s *UserService) LogIn(ctx context.Context, req *v1.UserLogInReq) (*v1.LogInReply, error) {
+func (s *UserService) LogIn(ctx context.Context, req *user.UserLogInReq) (*user.LogInReply, error) {
 	// check phone & password
 	id, err := s.uc.VerifyPassword(ctx, model.UserCheck{
 		Phone:    req.Phone,
@@ -40,9 +40,9 @@ func (s *UserService) LogIn(ctx context.Context, req *v1.UserLogInReq) (*v1.LogI
 	if err != nil {
 		return nil, err
 	}
-	return &v1.LogInReply{Id: id}, nil
+	return &user.LogInReply{Id: id}, nil
 }
-func (s *UserService) AdminRegister(ctx context.Context, req *v1.UserRegisterReq) (*v1.UserReply, error) {
+func (s *UserService) AdminRegister(ctx context.Context, req *user.UserRegisterReq) (*user.UserReply, error) {
 	if req.Password == "" {
 		return nil, errors.New("password can not be empty")
 	}
@@ -54,9 +54,9 @@ func (s *UserService) AdminRegister(ctx context.Context, req *v1.UserRegisterReq
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UserReply{Message: "register successful!"}, nil
+	return &user.UserReply{Message: "register successful!"}, nil
 }
-func (s *UserService) TeacherRegister(ctx context.Context, req *v1.UserRegisterReq) (*v1.UserReply, error) {
+func (s *UserService) TeacherRegister(ctx context.Context, req *user.UserRegisterReq) (*user.UserReply, error) {
 	if req.Password == "" {
 		return nil, errors.New("password can not be empty")
 	}
@@ -68,10 +68,10 @@ func (s *UserService) TeacherRegister(ctx context.Context, req *v1.UserRegisterR
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UserReply{Message: "register successful!"}, nil
+	return &user.UserReply{Message: "register successful!"}, nil
 
 }
-func (s *UserService) StudentRegister(ctx context.Context, req *v1.UserRegisterReq) (*v1.UserReply, error) {
+func (s *UserService) StudentRegister(ctx context.Context, req *user.UserRegisterReq) (*user.UserReply, error) {
 	if req.Password == "" {
 		return nil, errors.New("password can not be empty")
 	}
@@ -83,15 +83,15 @@ func (s *UserService) StudentRegister(ctx context.Context, req *v1.UserRegisterR
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UserReply{Message: "register successful!"}, nil
+	return &user.UserReply{Message: "register successful!"}, nil
 }
-func (s *UserService) UserInfo(ctx context.Context, req *v1.UserReq) (*v1.UserInfoReply, error) {
+func (s *UserService) UserInfo(ctx context.Context, req *user.UserReq) (*user.UserInfoReply, error) {
 
 	info, err := s.uc.GetInfo(ctx, req.Id)
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UserInfoReply{
+	return &user.UserInfoReply{
 		Name:      info.Name,
 		Phone:     info.Phone,
 		IsAdmin:   info.IsAdmin,
@@ -100,14 +100,14 @@ func (s *UserService) UserInfo(ctx context.Context, req *v1.UserReq) (*v1.UserIn
 		Id:        info.Id,
 	}, nil
 }
-func (s *UserService) DeleteUser(ctx context.Context, req *v1.UserReq) (*v1.UserReply, error) {
+func (s *UserService) DeleteUser(ctx context.Context, req *user.UserReq) (*user.UserReply, error) {
 	err := s.uc.DeleteUser(ctx, req.Id)
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UserReply{Message: "delete successful!"}, nil
+	return &user.UserReply{Message: "delete successful!"}, nil
 }
-func (s *UserService) UpdateUser(ctx context.Context, req *v1.UpdateUserReq) (*v1.UserReply, error) {
+func (s *UserService) UpdateUser(ctx context.Context, req *user.UpdateUserReq) (*user.UserReply, error) {
 	err := s.uc.UpdateUser(ctx, model.UserModel{
 		Name:     req.Name,
 		Phone:    req.Phone,
@@ -116,5 +116,5 @@ func (s *UserService) UpdateUser(ctx context.Context, req *v1.UpdateUserReq) (*v
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UserReply{Message: "update successful!"}, nil
+	return &user.UserReply{Message: "update successful!"}, nil
 }

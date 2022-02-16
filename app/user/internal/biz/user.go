@@ -26,7 +26,7 @@ type UserRepoInt interface {
 func NewUserCase(repo UserRepoInt, logger log.Logger) service.UserCase {
 	return &UserCase{
 		u:   repo,
-		log: log.NewHelper(log.With(logger, "module", "biz-user")),
+		log: log.NewHelper(log.With(logger, "module", "biz-service")),
 	}
 }
 

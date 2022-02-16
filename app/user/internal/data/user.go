@@ -71,7 +71,7 @@ func (u *UserRepo) CreateStudent(ctx context.Context, um model.UserModel) (int32
 		}
 		return -1, err
 	}
-	return -1, errors.New("user have existed")
+	return -1, errors.New("service have existed")
 }
 
 func (u *UserRepo) CreateAdmin(ctx context.Context, um model.UserModel) (int32, error) {
@@ -86,7 +86,7 @@ func (u *UserRepo) CreateAdmin(ctx context.Context, um model.UserModel) (int32, 
 		}
 		return -1, err
 	}
-	return -1, errors.New("user have existed")
+	return -1, errors.New("service have existed")
 }
 func (u *UserRepo) CreateTeacher(ctx context.Context, um model.UserModel) (int32, error) {
 	_, err := u.data.db.User.Query().Where(user.Phone(um.Phone)).Only(ctx)
@@ -102,7 +102,7 @@ func (u *UserRepo) CreateTeacher(ctx context.Context, um model.UserModel) (int32
 		}
 		return -1, err
 	}
-	return -1, errors.New("user have existed")
+	return -1, errors.New("service have existed")
 }
 
 func (u *UserRepo) UpdateUser(ctx context.Context, um model.UserModel, id int) error {

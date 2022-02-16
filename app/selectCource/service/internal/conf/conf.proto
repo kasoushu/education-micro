@@ -10,9 +10,13 @@ message AppConfig {
   Data data = 2;
   Consul consul= 3;
   Jaeger jaeger =4;
+  Auth auth=5;
 }
 message  Jaeger{
   string address = 1;
+}
+message Auth{
+  string service_key =1;
 }
 
 message Consul{
@@ -49,3 +53,4 @@ message Data {
   Database database = 1;
   Redis redis = 2;
 }
+

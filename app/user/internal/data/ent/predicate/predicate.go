@@ -6,5 +6,5 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// User is the predicate function for user builders.
+// User is the predicate function for service builders.
 type User func(*sql.Selector)

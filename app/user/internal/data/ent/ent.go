@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// ent aliases to avoid import conflicts in user's code.
+// ent aliases to avoid import conflicts in service's code.
 type (
 	Op         = ent.Op
 	Hook       = ent.Hook

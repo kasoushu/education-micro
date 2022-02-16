@@ -9,7 +9,7 @@ import (
 )
 
 // ProviderSet is server providers.
-var ProviderSet = wire.NewSet(NewHTTPServer, NewGRPCServer, NewConsulRegister)
+var ProviderSet = wire.NewSet(NewGRPCServer, NewConsulRegister)
 
 func NewConsulRegister(conf *conf.Consul) registry.Registrar {
 	apiConfig := consulApi.DefaultConfig()

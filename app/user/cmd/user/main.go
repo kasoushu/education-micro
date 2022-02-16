@@ -10,7 +10,6 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/jaeger"
@@ -25,7 +24,7 @@ import (
 // go build -ldflags "-X main.Version=x.y.z"
 var (
 	// Name is the name of the compiled software.
-	Name string = "Education"
+	Name string = "EducationUserService"
 	// Version is the version of the compiled software.
 	Version string = "0.1.0"
 	// flagconf is the config flag.
@@ -38,7 +37,7 @@ func init() {
 	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
 }
 
-func newApp(logger log.Logger, hs *http.Server, gs *grpc.Server, rs registry.Registrar) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, rs registry.Registrar) *kratos.App {
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
@@ -46,7 +45,6 @@ func newApp(logger log.Logger, hs *http.Server, gs *grpc.Server, rs registry.Reg
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(logger),
 		kratos.Server(
-			hs,
 			gs,
 		),
 		kratos.Registrar(rs),
@@ -84,7 +82,7 @@ func main() {
 	//tracing
 	SettracerProvider(appConfig.Jaeger.Address)
 
-	app, cleanup, err := initApp(appConfig.Server, appConfig.Data, appConfig.Consul, logger)
+	app, cleanup, err := initApp(appConfig.Server, appConfig.Auth, appConfig.Data, appConfig.Consul, logger)
 
 	if err != nil {
 		panic(err)

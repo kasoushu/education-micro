@@ -19,3 +19,5 @@ consul:
 
 jaeger:
   address: http://localhost:14268/api/traces
+auth:
+  service_key: "education demo"
