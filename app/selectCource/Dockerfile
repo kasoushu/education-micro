@@ -1,6 +1,6 @@
 FROM golang:1.16 AS builder
 
-COPY . /src
+COPY service /src
 WORKDIR /src
 
 RUN GOPROXY=https://goproxy.cn make build

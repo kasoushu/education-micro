@@ -49,6 +49,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-wordwrap v0.0.0-20150314170334-ad45545899c7 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
+	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/zclconf/go-cty v1.8.0 // indirect
 	go.opentelemetry.io/otel/trace v1.4.0 // indirect
 	golang.org/x/mod v0.5.1 // indirect

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package education.api.v1.course;
 
-import "google/api/annotations.proto";
+//import "google/api/annotations.proto";
 option go_package = "education/api/v1/course";
 
 //
@@ -13,6 +13,7 @@ service Course {
   rpc  SaveCourse(UpdateCourseReq) returns (Reply)  {}
   rpc  DeleteCourse(DeleteCourseReq) returns (Reply)  {}
   rpc  GetCourse(CourseReq) returns (CourseInfo)  {}
+  rpc  GetCourseListByTeacherId(CourseReq) returns (CourseListReply){}
   // select
   rpc  SetSelective(SetSelectiveReq) returns (Reply) {}
   rpc  DeleteSelect(DeleteSelectReq) returns (Reply){}
@@ -24,7 +25,7 @@ service Course {
   rpc  SaveGrade(GradeReq) returns (Reply){}
   rpc  GetGradeByCurriculum(SingleGradeReq) returns (SingleGradeReply){}
   rpc  GetPeriodListGradeByOneTerm(ListPeriodGradeReq) returns (ListGradeReply) {}
-  rpc  GetGroupListGradeByCurriculum(ListPeriodGradeReq) returns (ListGradeReply) {}
+  rpc  GetGroupListGradeByCurriculum(ListGroupGradeReq) returns (ListGradeReply) {}
 }
 //common
 message Reply{
@@ -82,7 +83,6 @@ message SingleGradeReq{
 message SingleGradeReply{
   uint64 id=1;
   uint64 curriculum_id=2;
-
   string curriculum_name=3;
   int32  credit=4;
   string category=5;
@@ -91,7 +91,9 @@ message SingleGradeReply{
   int32   score=8;
   int32   gain_credit=9;
   int32   grade_point=10;
-  string note = 11;
+  string   note = 11;
+  string student_name=12;
+  uint64 student_id =13;
 }
 message ListPeriodGradeReq{
   uint64 student_id=2;
@@ -102,11 +104,12 @@ message ListPeriodGradeReq{
 message ListGroupGradeReq{
   uint64 group_id=1;
   uint64 curriculum_id=2;
+  int32 grade_year=3;
+  int32 term =4;  // 1,2
 }
 message ListGradeReply{
   repeated SingleGradeReply list=1;
 }
-
 
 // course
 message CourseReq{
@@ -115,7 +118,9 @@ message CourseReq{
 message CourseInfo{
   uint64 id =1;
   uint64 classroom_id=2;
+  string classroom_name=12;
   uint64 teacher_id=10;
+  uint64 teacher_name=13;
   string name=11;
   string start_time=3;
   string end_time=4;
@@ -124,6 +129,9 @@ message CourseInfo{
   string category=7;
   int32 status=8;
   string exam_way=9;
+}
+message CourseListReply{
+  repeated CourseInfo list=1;
 }
 message CreateCourseReq{
   uint64 classroom_id=2;

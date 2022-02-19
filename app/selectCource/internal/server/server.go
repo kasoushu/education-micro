@@ -1,7 +1,7 @@
 package server
 
 import (
-	"education/app/selectCource/service/internal/conf"
+	"education/app/selectCource/internal/conf"
 	consul "github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/google/wire"
 	//"education/app/selectCource/interface/internal/conf"
@@ -12,14 +12,14 @@ import (
 // ProviderSet is server providers.
 var ProviderSet = wire.NewSet(NewGRPCServer, NewConsulRegister)
 
-func NewConsulRegister(conf *conf.Consul) registry.Registrar {
+func NewConsulRegister(conf *conf.AppConfig) registry.Registrar {
 	apiConfig := consulApi.DefaultConfig()
-	if conf.Address != "" {
-		apiConfig.Address = conf.Address
+	if conf.Consul.Address != "" {
+		apiConfig.Address = conf.Consul.Address
 	}
 
-	if conf.Scheme != "" {
-		apiConfig.Scheme = conf.Scheme
+	if conf.Consul.Scheme != "" {
+		apiConfig.Scheme = conf.Consul.Scheme
 	}
 	apicli, err := consulApi.NewClient(apiConfig)
 	if err != nil {

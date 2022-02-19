@@ -1,8 +1,8 @@
 package data
 
 import (
-	"education/app/selectCource/service/internal/conf"
-	"education/app/selectCource/service/internal/model"
+	"education/app/selectCource/internal/conf"
+	model2 "education/app/selectCource/internal/model"
 	"github.com/go-kratos/kratos/v2/log"
 	//_ "github.com/go-sql-driver/mysql"
 	"github.com/google/wire"
@@ -11,7 +11,7 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewGormDb)
+var ProviderSet = wire.NewSet(NewData, NewGormDb, NewCourseRepo)
 
 // Data .
 type Data struct {
@@ -25,36 +25,39 @@ func NewGormDb(conf *conf.AppConfig, logger log.Logger) *gorm.DB {
 	if err != nil {
 		l.Fatal(err)
 	}
-	db = db.Set("gorm:table_options", "AUTOINCREMENT=100000000")
-	err = db.AutoMigrate(&model.Class{})
+	log := log.NewHelper(logger)
+	log.Info("db initiating!")
+	db = db.Set("gorm:table_options", "AUTO_INCREMENT=100000000")
+	err = db.AutoMigrate(&model2.Class{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = db.AutoMigrate(&model.Group{})
+	err = db.AutoMigrate(&model2.Group{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = db.AutoMigrate(&model.Grade{})
+	err = db.AutoMigrate(&model2.Grade{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = db.AutoMigrate(&model.Department{})
+	err = db.AutoMigrate(&model2.Department{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = db.AutoMigrate(&model.Major{})
+	err = db.AutoMigrate(&model2.Major{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = db.AutoMigrate(&model.Curriculum{})
+	err = db.AutoMigrate(&model2.Curriculum{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = db.AutoMigrate(&model.SelectiveCourse{})
+	err = db.AutoMigrate(&model2.SelectiveCourse{})
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Info("db initiated")
 	return db
 }
 

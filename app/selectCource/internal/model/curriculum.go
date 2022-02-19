@@ -19,3 +19,6 @@ type Curriculum struct {
 	ExamWay     string //
 	TeacherId   uint64
 }
+
+type CurriculumItem struct {
+}
