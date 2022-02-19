@@ -1,49 +1,70 @@
 package data
 
 import (
-	"context"
 	"education/app/selectCource/service/internal/conf"
-	"education/app/selectCource/service/internal/data/ent"
-	"education/app/selectCource/service/internal/data/ent/migrate"
+	"education/app/selectCource/service/internal/model"
 	"github.com/go-kratos/kratos/v2/log"
-	_ "github.com/go-sql-driver/mysql"
+	//_ "github.com/go-sql-driver/mysql"
 	"github.com/google/wire"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewGreeterRepo)
+var ProviderSet = wire.NewSet(NewData, NewGormDb)
 
 // Data .
 type Data struct {
-	// TODO wrapped database client
-	db *ent.Client
+	db  *gorm.DB
+	log *log.Helper
 }
 
-// NewData .
-func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
-
-	log := log.NewHelper(log.With(logger, "module", "data"))
-	log.Info("ent Client init")
-
-	cli, err := ent.Open(c.Database.Driver, c.Database.Source)
+func NewGormDb(conf *conf.AppConfig, logger log.Logger) *gorm.DB {
+	db, err := gorm.Open(mysql.Open(conf.Data.Database.Source), &gorm.Config{})
+	l := log.NewHelper(logger)
+	if err != nil {
+		l.Fatal(err)
+	}
+	db = db.Set("gorm:table_options", "AUTOINCREMENT=100000000")
+	err = db.AutoMigrate(&model.Class{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = db.AutoMigrate(&model.Group{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = db.AutoMigrate(&model.Grade{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = db.AutoMigrate(&model.Department{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if err := cli.Schema.Create(context.Background(), migrate.WithForeignKeys(false)); err != nil {
-		log.Fatalf("failed creating schema resources: %v", err)
-	}
-	data := Data{db: cli}
-	cleanup := func() {
-		log.Info("closing the data resources ")
-		if err := data.db.Close(); err != nil {
-			log.Error("close data db error")
-		}
-	}
-
-	_, err = data.db.User.Create().SetName("liming").SetPassword("0000").SetIsAdmin(true).SetIsStudent(false).SetIsTeacher(true).Save(context.Background())
+	err = db.AutoMigrate(&model.Major{})
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
-	return &Data{}, cleanup, nil
+	err = db.AutoMigrate(&model.Curriculum{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = db.AutoMigrate(&model.SelectiveCourse{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	return db
+}
+
+// NewData .
+func NewData(c *conf.AppConfig, db *gorm.DB, logger log.Logger) (*Data, func(), error) {
+
+	return &Data{
+			db:  db,
+			log: log.NewHelper(log.With(logger, "module", "data")),
+		}, func() {
+			log.NewHelper(logger).Info("cleaning!\n closing!")
+		}, nil
 }

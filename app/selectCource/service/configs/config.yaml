@@ -8,7 +8,7 @@ server:
 data:
   database:
     driver: mysql
-    source: root:0026@tcp(choucaicai.top:3308)/education
+    source: root:0026@tcp(choucaicai.top:3308)/education?parseTime=true
   redis:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
@@ -19,3 +19,5 @@ consul:
 
 jaeger:
   address: http://localhost:14268/api/traces
+auth:
+  service_key: "education-demo"

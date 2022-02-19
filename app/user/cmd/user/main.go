@@ -10,6 +10,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/jaeger"
@@ -24,13 +25,13 @@ import (
 // go build -ldflags "-X main.Version=x.y.z"
 var (
 	// Name is the name of the compiled software.
-	Name string = "EducationUserService"
+	Name string = "education.user"
 	// Version is the version of the compiled software.
 	Version string = "0.1.0"
 	// flagconf is the config flag.
 	flagconf string
 
-	id, _ = os.Hostname()
+	id = uuid.New().String()
 )
 
 func init() {
@@ -56,9 +57,9 @@ func main() {
 	logger := log.With(log.NewStdLogger(os.Stdout),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
-		//"service.id", id,
-		"service.name", Name,
-		"service.version", Version,
+		//"interface.id", id,
+		"interface.name", Name,
+		"interface.version", Version,
 		"trace_id", tracing.TraceID(),
 		"span_id", tracing.SpanID(),
 		"  : = > + < ", " :\n",

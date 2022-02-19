@@ -16,26 +16,26 @@ func init() {
 	_ = userFields
 	// userDescName is the schema descriptor for name field.
 	userDescName := userFields[0].Descriptor()
-	// service.DefaultName holds the default value on creation for the name field.
+	// interface.DefaultName holds the default value on creation for the name field.
 	user.DefaultName = userDescName.Default.(string)
 	// userDescPhone is the schema descriptor for phone field.
 	userDescPhone := userFields[1].Descriptor()
-	// service.DefaultPhone holds the default value on creation for the phone field.
+	// interface.DefaultPhone holds the default value on creation for the phone field.
 	user.DefaultPhone = userDescPhone.Default.(string)
 	// userDescIsAdmin is the schema descriptor for is_admin field.
 	userDescIsAdmin := userFields[3].Descriptor()
-	// service.DefaultIsAdmin holds the default value on creation for the is_admin field.
+	// interface.DefaultIsAdmin holds the default value on creation for the is_admin field.
 	user.DefaultIsAdmin = userDescIsAdmin.Default.(bool)
 	// userDescIsStudent is the schema descriptor for is_student field.
 	userDescIsStudent := userFields[4].Descriptor()
-	// service.DefaultIsStudent holds the default value on creation for the is_student field.
+	// interface.DefaultIsStudent holds the default value on creation for the is_student field.
 	user.DefaultIsStudent = userDescIsStudent.Default.(bool)
 	// userDescIsTeacher is the schema descriptor for is_teacher field.
 	userDescIsTeacher := userFields[5].Descriptor()
-	// service.DefaultIsTeacher holds the default value on creation for the is_teacher field.
+	// interface.DefaultIsTeacher holds the default value on creation for the is_teacher field.
 	user.DefaultIsTeacher = userDescIsTeacher.Default.(bool)
 	// userDescCreated is the schema descriptor for created field.
 	userDescCreated := userFields[6].Descriptor()
-	// service.DefaultCreated holds the default value on creation for the created field.
+	// interface.DefaultCreated holds the default value on creation for the created field.
 	user.DefaultCreated = userDescCreated.Default.(func() time.Time)
 }

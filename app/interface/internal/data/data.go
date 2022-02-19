@@ -41,7 +41,7 @@ func NewData(c *conf.AppConfig, userClient userv1.UserClient) (*Data, func(), er
 func NewUserClient(discover registry.Discovery, conf *conf.AppConfig) userv1.UserClient {
 	conn, err := grpc.DialInsecure(
 		context.Background(),
-		grpc.WithEndpoint("discovery:///beer.user.service"),
+		grpc.WithEndpoint("discovery:///education.user"),
 		grpc.WithDiscovery(discover),
 		grpc.WithMiddleware(
 			tracing.Server(),

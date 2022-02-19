@@ -4,7 +4,7 @@
 openapi: 3.0.3
 info:
     title: Greeter API
-    description: The greeting service definition.
+    description: The greeting interface definition.
     version: 0.0.1
 paths:
     /helloworld/{name}:

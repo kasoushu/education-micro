@@ -32,6 +32,7 @@ func (u *UserRepo) LogIn(ctx context.Context, um model.UserLogIn) (int32, error)
 }
 
 func (u *UserRepo) CreateStudent(ctx context.Context, um model.UserModel) error {
+	//u.log.Info("passing")
 	_, err := u.d.userClient.StudentRegister(ctx, &userv1.UserRegisterReq{
 		Name:     um.Name,
 		Phone:    um.Phone,

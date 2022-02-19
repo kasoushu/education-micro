@@ -21,7 +21,7 @@ func NewGRPCServer(c *conf.Server, auth *conf.Auth, userSvc *service.UserService
 			tracing.Server(),
 			logging.Server(logger),
 			jwt.Server(func(token *jwt2.Token) (interface{}, error) {
-				return auth.ServiceKey, nil
+				return []byte(auth.ServiceKey), nil
 			}, jwt.WithSigningMethod(jwt2.SigningMethodHS256)),
 		),
 	}

@@ -4,13 +4,13 @@ import (
 	"education/app/selectCource/service/internal/conf"
 	consul "github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/google/wire"
-	//"education/app/selectCource/service/internal/conf"
+	//"education/app/selectCource/interface/internal/conf"
 	"github.com/go-kratos/kratos/v2/registry"
 	consulApi "github.com/hashicorp/consul/api"
 )
 
 // ProviderSet is server providers.
-var ProviderSet = wire.NewSet(NewHTTPServer, NewGRPCServer, NewConsulRegister)
+var ProviderSet = wire.NewSet(NewGRPCServer, NewConsulRegister)
 
 func NewConsulRegister(conf *conf.Consul) registry.Registrar {
 	apiConfig := consulApi.DefaultConfig()

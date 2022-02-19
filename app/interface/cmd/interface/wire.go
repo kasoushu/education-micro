@@ -6,11 +6,11 @@
 package main
 
 import (
-	"education/app/user/internal/biz"
-	"education/app/user/internal/conf"
-	"education/app/user/internal/data"
-	"education/app/user/internal/server"
-	"education/app/user/internal/service"
+	"education/app/interface/internal/biz"
+	"education/app/interface/internal/conf"
+	"education/app/interface/internal/data"
+	"education/app/interface/internal/server"
+	"education/app/interface/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"

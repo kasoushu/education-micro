@@ -53,7 +53,7 @@ func (u *UserCase) LogIn(ctx context.Context, in model.UserLogIn) (iv1.LogInRepl
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
-	tokenString, err := token.SignedString(u.key)
+	tokenString, err := token.SignedString([]byte(u.key))
 	if err != nil {
 		u.log.Error(err)
 		return iv1.LogInReply{}, model.ERROR_TOKEN_GENERATE_FAIL

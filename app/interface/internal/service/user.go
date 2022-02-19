@@ -24,7 +24,7 @@ type UserCase interface {
 func NewUserService(u UserCase, l log.Logger) *UserService {
 	return &UserService{
 		uc:  u,
-		log: log.NewHelper(log.With(l, "module", "service-service")),
+		log: log.NewHelper(log.With(l, "module", "interface-interface")),
 	}
 }
 

@@ -258,7 +258,7 @@ func (uq *UserQuery) Clone() *UserQuery {
 //	}
 //
 //	client.User.Query().
-//		GroupBy(service.FieldName).
+//		GroupBy(interface.FieldName).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -284,7 +284,7 @@ func (uq *UserQuery) GroupBy(field string, fields ...string) *UserGroupBy {
 //	}
 //
 //	client.User.Query().
-//		Select(service.FieldName).
+//		Select(interface.FieldName).
 //		Scan(ctx, &v)
 //
 func (uq *UserQuery) Select(fields ...string) *UserSelect {

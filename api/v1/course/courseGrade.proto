@@ -1,0 +1,181 @@
+syntax = "proto3";
+
+package education.api.v1.course;
+
+import "google/api/annotations.proto";
+option go_package = "education/api/v1/course";
+
+//
+
+service Course {
+  //course
+  rpc  CreateCourse(CreateCourseReq) returns (Reply)  {}
+  rpc  SaveCourse(UpdateCourseReq) returns (Reply)  {}
+  rpc  DeleteCourse(DeleteCourseReq) returns (Reply)  {}
+  rpc  GetCourse(CourseReq) returns (CourseInfo)  {}
+  // select
+  rpc  SetSelective(SetSelectiveReq) returns (Reply) {}
+  rpc  DeleteSelect(DeleteSelectReq) returns (Reply){}
+  rpc  CreateSelect(CreateSelectReq) returns (Reply){}
+  rpc  GetSelect(GetSelectReq) returns (SelectReply) {}
+  rpc  GetCourseListSelect(ListSelectReq) returns (ListSelectReply){}
+  // grade
+  rpc  SetGrade(GradeReq) returns (Reply){}
+  rpc  SaveGrade(GradeReq) returns (Reply){}
+  rpc  GetGradeByCurriculum(SingleGradeReq) returns (SingleGradeReply){}
+  rpc  GetPeriodListGradeByOneTerm(ListPeriodGradeReq) returns (ListGradeReply) {}
+  rpc  GetGroupListGradeByCurriculum(ListPeriodGradeReq) returns (ListGradeReply) {}
+}
+//common
+message Reply{
+  string message =1;
+}
+// select
+message SetSelectiveReq{
+  uint64  id =1;
+  uint64  curriculum_id =2;
+}
+message CreateSelectReq{
+  uint64 curriculum_id=1;
+  uint64 group_id =2;
+  uint64 student_id=3;
+}
+message DeleteSelectReq{
+  uint64 id=1;
+}
+message GetSelectReq{
+  uint64 id=1;
+}
+message SelectReply{
+  uint64 id=1;
+  uint64 curriculum_id=2;
+  uint64 group_id=3;
+  uint64 student_id=4;
+  string curriculum_name=5;
+  string group_name=6;
+  string student_name=7;
+}
+message ListSelectReq{
+  uint64 curriculum_id=1;
+}
+message ListSelectReply{
+  repeated SelectReply list=1;
+}
+//grade
+message GradeReq{
+  uint64  student_id=1;
+  uint64 curriculum_id=2;
+  int32 score=3;
+  string study_level=4;
+  int32 grade_point=5;
+  string note=6;
+  int32 grade_year=7;
+  int32 term =8;  // 1,2
+}
+message SingleGradeReq{
+  uint64 curriculum_id=1;
+  uint64 student_id=2;
+  int32 grade_year=3;
+  int32 term =4;  // 1,2
+}
+
+message SingleGradeReply{
+  uint64 id=1;
+  uint64 curriculum_id=2;
+
+  string curriculum_name=3;
+  int32  credit=4;
+  string category=5;
+  string exam_way=6;
+  string study_level=7;
+  int32   score=8;
+  int32   gain_credit=9;
+  int32   grade_point=10;
+  string note = 11;
+}
+message ListPeriodGradeReq{
+  uint64 student_id=2;
+  int32 grade_year=3;
+  int32 term =4;  // 1,2
+}
+
+message ListGroupGradeReq{
+  uint64 group_id=1;
+  uint64 curriculum_id=2;
+}
+message ListGradeReply{
+  repeated SingleGradeReply list=1;
+}
+
+
+// course
+message CourseReq{
+  uint64 id =1 ;
+}
+message CourseInfo{
+  uint64 id =1;
+  uint64 classroom_id=2;
+  uint64 teacher_id=10;
+  string name=11;
+  string start_time=3;
+  string end_time=4;
+  int32  credit=5;
+  int32 school_hour=6;
+  string category=7;
+  int32 status=8;
+  string exam_way=9;
+}
+message CreateCourseReq{
+  uint64 classroom_id=2;
+  uint64 teacher_id=10;
+  string name=11;
+  string start_time=3;
+  string end_time=4;
+  int32  credit=5;
+  int32 school_hour=6;
+  string category=7;
+  string exam_way=9;
+}
+
+message DeleteCourseReq{
+  uint64 id=1;
+}
+message UpdateCourseReq{
+  uint64 id =1;
+  uint64 classroom_id=2;
+  uint64 teacher_id=10;
+  string name=11;
+  string start_time=3;
+  string end_time=4;
+  int32  credit=5;
+  int32 school_hour=6;
+  string category=7;
+  int32 status=8;
+  string exam_way=9;
+}
+//service CourseHttp{
+//  rpc  CreateCourse(CreateCourseReq) returns (Reply)  {
+//    option (google.api.http) = {
+//      post: "/course"
+//      body:"*"
+//    };
+//  }
+//  rpc  UpdateCourse(UpdateCourseReq) returns (Reply)  {
+//    option (google.api.http) = {
+//      put: "/course"
+//      body:"*"
+//    };
+//  }
+//  rpc  DeleteCourse(DeleteCourseReq) returns (Reply)  {
+//    option (google.api.http) = {
+//      delete: "/course"
+//      body:"*"
+//    };
+//  }
+//  rpc  GetCourse(CourseReq) returns (CourseInfo)  {
+//    option (google.api.http) = {
+//      get: "/course"
+//      body:"*"
+//    };
+//  }
+//}

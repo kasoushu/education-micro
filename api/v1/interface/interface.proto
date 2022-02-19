@@ -6,7 +6,7 @@ import "google/api/annotations.proto";
 option go_package = "education/api/v1/interface";
 
 
-service User {
+service Interface {
   rpc LogIn (UserLogInReq) returns (LogInReply)  {
     option (google.api.http) = {
       post: "/login"
@@ -34,17 +34,17 @@ service User {
   }
   rpc UserInfo (UserReq) returns (UserInfoReply){
     option(google.api.http) = {
-      get:"/service/{id}"
+      get:"/user/{id}"
     };
   }
   rpc DeleteUser(UserReq) returns (UserReply){
     option(google.api.http)={
-      delete:"/service/{id}"
+      delete:"/user/{id}"
     };
   }
   rpc UpdateUser(UpdateUserReq) returns (UserReply){
     option(google.api.http)={
-      put:"/service/{id}"
+      put:"/user/{id}"
       body:"*"
     };
   }
