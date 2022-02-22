@@ -25,6 +25,6 @@ func NewHttpServer(c *conf.AppConfig, userSvc *service.UserService, logger log.L
 		opts = append(opts, http.Timeout(c.Server.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	iv1.RegisterUserHTTPServer(srv, userSvc)
+	iv1.RegisterInterfaceHTTPServer(srv, userSvc)
 	return srv
 }

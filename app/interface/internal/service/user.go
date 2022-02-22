@@ -8,7 +8,7 @@ import (
 )
 
 type UserService struct {
-	iv1.UnimplementedUserServer
+	iv1.UnimplementedInterfaceServer
 	uc  UserCase
 	log *log.Helper
 }
