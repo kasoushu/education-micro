@@ -22,7 +22,7 @@ service Course {
   rpc  GetCourseListSelect(ListSelectReq) returns (ListSelectReply){}
   // grade
   rpc  SetGrade(GradeReq) returns (Reply){}
-  rpc  SaveGrade(GradeReq) returns (Reply){}
+  rpc  UpdateGrade(GradeUpdateReq) returns (Reply){}
   rpc  GetGradeByCurriculum(SingleGradeReq) returns (SingleGradeReply){}
   rpc  GetPeriodListGradeByOneTerm(ListPeriodGradeReq) returns (ListGradeReply) {}
   rpc  GetGroupListGradeByCurriculum(ListGroupGradeReq) returns (ListGradeReply) {}
@@ -73,6 +73,19 @@ message GradeReq{
   int32 grade_year=7;
   int32 term =8;  // 1,2
 }
+
+message GradeUpdateReq{
+  uint64  grade_id=9;
+  uint64  student_id=1;
+  uint64 curriculum_id=2;
+  int32 score=3;
+  string study_level=4;
+  int32 grade_point=5;
+  string note=6;
+  int32 grade_year=7;
+  int32 term =8;  // 1,2
+}
+
 message SingleGradeReq{
   uint64 curriculum_id=1;
   uint64 student_id=2;

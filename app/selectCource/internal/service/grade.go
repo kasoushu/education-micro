@@ -7,7 +7,7 @@ import (
 
 type GradeCase interface {
 	Create(context.Context, *cv1.GradeReq) error
-	SaveGrade(context.Context, *cv1.GradeReq) error
+	UpdateGrade(context.Context, *cv1.GradeUpdateReq) error
 	GetGradeByCurriculum(context.Context, *cv1.SingleGradeReq) (*cv1.SingleGradeReply, error)
 	GetPeriodListGradeByOneTerm(ctx context.Context, req *cv1.ListPeriodGradeReq) (*cv1.ListGradeReply, error)
 	GetGroupListGradeByCurriculum(ctx context.Context, req *cv1.ListGroupGradeReq) (*cv1.ListGradeReply, error)
@@ -21,8 +21,8 @@ func (s *CourseService) SetGrade(ctx context.Context, req *cv1.GradeReq) (*cv1.R
 	}
 	return &cv1.Reply{Message: "set successful!"}, nil
 }
-func (s *CourseService) SaveGrade(ctx context.Context, req *cv1.GradeReq) (*cv1.Reply, error) {
-	err := s.gradeCase.SaveGrade(ctx, req)
+func (s *CourseService) UpdateGrade(ctx context.Context, req *cv1.GradeUpdateReq) (*cv1.Reply, error) {
+	err := s.gradeCase.UpdateGrade(ctx, req)
 	if err != nil {
 		s.log.Error(err)
 		return nil, err

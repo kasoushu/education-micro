@@ -9,3 +9,13 @@ type SelectiveCourse struct {
 	GroupId      uint64
 	StudentId    uint64
 }
+
+type SelectInfo struct {
+	Id             uint64
+	CurriculumId   uint64
+	GroupId        uint64
+	StudentId      uint64
+	StudentName    string
+	GroupName      string
+	CurriculumName string
+}
