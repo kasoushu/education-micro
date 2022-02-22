@@ -135,8 +135,8 @@ message CourseInfo{
   uint64 teacher_id=10;
   uint64 teacher_name=13;
   string name=11;
-  string start_time=3;
-  string end_time=4;
+  int32 grade_year=3;
+  int32 term=4;
   int32  credit=5;
   int32 school_hour=6;
   string category=7;
@@ -150,8 +150,8 @@ message CreateCourseReq{
   uint64 classroom_id=2;
   uint64 teacher_id=10;
   string name=11;
-  string start_time=3;
-  string end_time=4;
+  int32 grade_year=3;
+  int32 term=4;
   int32  credit=5;
   int32 school_hour=6;
   string category=7;
@@ -166,8 +166,8 @@ message UpdateCourseReq{
   uint64 classroom_id=2;
   uint64 teacher_id=10;
   string name=11;
-  string start_time=3;
-  string end_time=4;
+  int32 grade_year=3;
+  int32 term=4;
   int32  credit=5;
   int32 school_hour=6;
   string category=7;
