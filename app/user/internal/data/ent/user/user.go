@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	// Label holds the string label denoting the service type in the database.
-	Label = "service"
+	// Label holds the string label denoting the course type in the database.
+	Label = "course"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
 	// FieldName holds the string denoting the name field in the database.
@@ -25,11 +25,11 @@ const (
 	FieldIsTeacher = "is_teacher"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
-	// Table holds the table name of the service in the database.
+	// Table holds the table name of the course in the database.
 	Table = "users"
 )
 
-// Columns holds all SQL columns for service fields.
+// Columns holds all SQL columns for course fields.
 var Columns = []string{
 	FieldID,
 	FieldName,

@@ -44,14 +44,14 @@ func newApp(logger log.Logger, conf *conf.AppConfig, gs *grpc.Server, rs registr
 }
 func loggerInit() log.Logger {
 	cusLog := pkg.NewLogger()
-	logger := log.With(cusLog)//"ts", log.DefaultTimestamp,
+	logger := log.With(cusLog) //"ts", log.DefaultTimestamp,
 	//"caller", log.DefaultCaller,
 	//"interface.id", id,
 
 	//"trace_id", tracing.TraceID(),
 	//"span_id", tracing.SpanID(),
 
-	log.NewHelper(logger).Info("service is initiating!")
+	log.NewHelper(logger).Info("course is initiating!")
 	log.NewHelper(logger).Infof("Service Name:\x1b[31m%s\x1b[0m  \x1b[34mService Version:\x1b[0m \x1B[32m%s\x1B[0m", Name, Version)
 	log.SetLogger(logger)
 	return logger
