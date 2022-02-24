@@ -24,7 +24,7 @@ func NewCourseRepo(d *Data, logger log.Logger) biz.CourseRepo {
 func (c *CourseRepo) Create(ctx context.Context, curriculum *model.Curriculum) error {
 	cc := model.Curriculum{}
 	res := c.data.db.WithContext(ctx).First(cc, "name=?", curriculum.Name)
-	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
+	if !errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		return model.CURRICULUM_HAD_EXISTED
 	}
 	if res = c.data.db.WithContext(ctx).Create(curriculum); res.Error != nil {

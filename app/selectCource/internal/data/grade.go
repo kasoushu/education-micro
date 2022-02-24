@@ -4,7 +4,9 @@ import (
 	"context"
 	"education/app/selectCource/internal/biz"
 	"education/app/selectCource/internal/model"
+	"errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"gorm.io/gorm"
 )
 
 type GradeRepo struct {
@@ -20,13 +22,32 @@ func NewGradeRepo(d *Data, logger log.Logger) biz.GradeRepo {
 }
 
 func (g *GradeRepo) Create(ctx context.Context, grade *model.Grade) error {
-	//TODO implement me
-	panic("implement me")
+	cc := model.Grade{}
+	res := g.data.db.WithContext(ctx).Where("student_id=?,curriculum_id=?", grade.StudentId, grade.CurriculumId).First(cc)
+	if !errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		return model.CURRICULUM_HAD_EXISTED
+	}
+	if res = g.data.db.WithContext(ctx).Create(grade); res.Error != nil {
+		g.log.Error(res.Error)
+		return res.Error
+	}
+	return nil
 }
 
 func (g *GradeRepo) Update(ctx context.Context, grade *model.Grade, id uint64) error {
-	//TODO implement me
-	panic("implement me")
+	cc := model.Grade{}
+	res := g.data.db.WithContext(ctx).First(cc, id)
+	if res.Error != nil {
+		c.log.Error(res.Error)
+		return res.Error
+	}
+	curriculum.Id = id
+	res = c.data.db.WithContext(ctx).Model(cc).Updates(curriculum)
+	if res.Error != nil {
+		c.log.Error(res.Error)
+		return res.Error
+	}
+	return nil
 }
 
 func (g *GradeRepo) GetGradeByCurriculum(ctx context.Context, GradeQuery *model.GradeQueryByCurriculumOnOneTerm) (*model.SingleGrade, error) {

@@ -14,7 +14,7 @@ type Curriculum struct {
 	Credit      int32
 	SchoolHour  int32
 	Category    string
-	Status      int32  // 0,1,2,3,4
+	Status      int32  // 0未选,1 可选 ,2 未开课 ,3 未结课 ,4已结课
 	ExamWay     string //
 	TeacherId   uint64
 }
