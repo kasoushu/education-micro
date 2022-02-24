@@ -4,20 +4,20 @@
 
 
 ## 暂定要使用的技术
-|技术|说明|链接|
-|---|---|---
-|kratos|微服务框架|<https://go-kratos.dev/docs/>|
-|protobuf|生成grpc|<https://developers.google.com/protocol-buffers/docs/downloads>
-|jwt|用户验证| <https://github.com/dgrijalva/jwt-go>|
-|grpc|远程调用|<>|
-|jaeger|链路追踪|<>|
-|consul|服务注册，服务发现|<>|
-|ent|orm框架 |<>|
-|gorm|orm框架 |<>|
+|技术|说明| 链接 |
+|---|---|----|
+|kratos|微服务框架| <https://go-kratos.dev/docs/> |
+|protobuf|生成grpc| <https://developers.google.com/protocol-buffers/docs/downloads> 
+|jwt|用户验证| <https://github.com/dgrijalva/jwt-go> |
+|grpc|远程调用| <https://grpc.io/docs/languages/go/quickstart/> |
+|jaeger|链路追踪| <https://pkg.go.dev/go.opentelemetry.io/otel/exporters/jaeger> |
+|consul|服务注册，服务发现| <https://github.com/golang-jwt/jwt>|
+|ent|orm框架 | <https://github.com/ent/ent> |
+|gorm|orm框架 | <https://github.com/go-gorm/gorm> |
 
 ## 目前进度
 |step|status|
-|---|---|
+|---|--|
 |用户管理微服务|已实现|
-|选课成绩管理微服务|正在施工|
+|选课成绩管理微服务|已实现|
 |机构管理微服务|未施工|
