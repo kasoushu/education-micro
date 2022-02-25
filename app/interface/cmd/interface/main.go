@@ -2,23 +2,16 @@ package main
 
 import (
 	"education/app/interface/internal/conf"
+	"education/pkg"
 	"flag"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/exporters/jaeger"
-	"go.opentelemetry.io/otel/sdk/resource"
-	tracesdk "go.opentelemetry.io/otel/sdk/trace"
-	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
-	"os"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
@@ -37,7 +30,6 @@ var (
 func init() {
 	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
 }
-
 func newApp(logger log.Logger, hs *http.Server, gs *grpc.Server, rs registry.Registrar) *kratos.App {
 	return kratos.New(
 		kratos.ID(id),
@@ -52,19 +44,21 @@ func newApp(logger log.Logger, hs *http.Server, gs *grpc.Server, rs registry.Reg
 		kratos.Registrar(rs),
 	)
 }
-
+func loggerInit() log.Logger {
+	cusLog := pkg.NewLogger()
+	logger := log.With(cusLog) //"ts", log.DefaultTimestamp,
+	//"caller", log.DefaultCaller,
+	//"interface.id", id,
+	//"trace_id", tracing.TraceID(),
+	//"span_id", tracing.SpanID(),
+	log.NewHelper(logger).Info("interface is initiating!")
+	log.NewHelper(logger).Infof("Service Name:\x1b[31m%s\x1b[0m  \x1b[34mService Version:\x1b[0m \x1B[32m%s\x1B[0m", Name, Version)
+	log.SetLogger(logger)
+	return logger
+}
 func main() {
 
-	logger := log.With(log.NewStdLogger(os.Stdout),
-		"ts", log.DefaultTimestamp,
-		"caller", log.DefaultCaller,
-		//"interface.id", id,
-		"interface.name", Name,
-		"interface.version", Version,
-		"trace_id", tracing.TraceID(),
-		"span_id", tracing.SpanID(),
-		"  : = > + < ", " :\n",
-	)
+	logger := loggerInit()
 	// tracing provider
 	c := config.New(
 		config.WithSource(
@@ -79,12 +73,13 @@ func main() {
 	if err := c.Scan(&appConfig); err != nil {
 		panic(err)
 	}
-
 	// init tracing
-	SetTracerProvider(appConfig.Jaeger.Address)
-
+	pkg.SetTracerProvider(pkg.JaegerConfig{
+		Name: Name,
+		Url:  appConfig.Jaeger.Address,
+		ID:   id,
+	}, logger)
 	app, cleanup, err := initApp(&appConfig, logger)
-
 	if err != nil {
 		panic(err)
 	}
@@ -93,24 +88,4 @@ func main() {
 	if err := app.Run(); err != nil {
 		panic(err)
 	}
-}
-
-func SetTracerProvider(url string) {
-	// Create the Jaeger exporter
-	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(url)))
-	if err != nil {
-		panic(err)
-	}
-	tp := tracesdk.NewTracerProvider(
-		// Always be sure to batch in production.
-		tracesdk.WithBatcher(exp),
-		// Record information about this application in a Resource.
-		tracesdk.WithResource(resource.NewWithAttributes(
-			semconv.SchemaURL,
-			semconv.ServiceNameKey.String(Name),
-			//attribute.String("environment", en),
-			attribute.Int64("ID", 10086),
-		)),
-	)
-	otel.SetTracerProvider(tp)
 }
