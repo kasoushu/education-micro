@@ -14,4 +14,7 @@ var (
 	ERROR_DELETE_FAIL         = errors.New("error!,delete error")
 	ERROR_TOKEN_GENERATE_FAIL = errors.New("error!,token generate error")
 	ERROR_GET_INFO_FAIL       = errors.New("error!,get info error")
+
+	CURRICULUM_HAD_EXISTED = errors.New("curriculum had existed ")
+	CURRICULUM_NOT_FOUND   = errors.New("curriculum not found ")
 )

@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package education.api.v1.course;
+package api.v1.course;
 
 //import "google/api/annotations.proto";
-option go_package = "education/api/v1/course";
+option go_package = "api/v1/course";
 
 //
 

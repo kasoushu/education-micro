@@ -4,14 +4,7 @@ import (
 	"context"
 	iv1 "education/api/v1/interface"
 	"education/app/interface/internal/model"
-	"github.com/go-kratos/kratos/v2/log"
 )
-
-type UserService struct {
-	iv1.UnimplementedInterfaceServer
-	uc  UserCase
-	log *log.Helper
-}
 
 type UserCase interface {
 	LogIn(context.Context, model.UserLogIn) (iv1.LogInReply, error)
@@ -21,18 +14,11 @@ type UserCase interface {
 	UpdateUser(context.Context, model.UserModel, int32) error
 }
 
-func NewUserService(u UserCase, l log.Logger) *UserService {
-	return &UserService{
-		uc:  u,
-		log: log.NewHelper(log.With(l, "module", "interface-interface")),
-	}
-}
-
 //
 
-func (s *UserService) LogIn(ctx context.Context, req *iv1.UserLogInReq) (*iv1.LogInReply, error) {
+func (s *InterfaceService) LogIn(ctx context.Context, req *iv1.UserLogInReq) (*iv1.LogInReply, error) {
 	// check phone & password
-	res, err := s.uc.LogIn(ctx, model.UserLogIn{
+	res, err := s.userCase.LogIn(ctx, model.UserLogIn{
 		Phone:    req.Phone,
 		Password: req.Password,
 	})
@@ -41,8 +27,8 @@ func (s *UserService) LogIn(ctx context.Context, req *iv1.UserLogInReq) (*iv1.Lo
 	}
 	return &res, nil
 }
-func (s *UserService) AdminRegister(ctx context.Context, req *iv1.UserRegisterReq) (*iv1.UserReply, error) {
-	err := s.uc.CreateUser(ctx, model.UserModel{
+func (s *InterfaceService) AdminRegister(ctx context.Context, req *iv1.UserRegisterReq) (*iv1.UserReply, error) {
+	err := s.userCase.CreateUser(ctx, model.UserModel{
 		Name:     req.Name,
 		Phone:    req.Phone,
 		Password: req.Password,
@@ -52,8 +38,8 @@ func (s *UserService) AdminRegister(ctx context.Context, req *iv1.UserRegisterRe
 	}
 	return &iv1.UserReply{Message: "register successful!"}, nil
 }
-func (s *UserService) TeacherRegister(ctx context.Context, req *iv1.UserRegisterReq) (*iv1.UserReply, error) {
-	err := s.uc.CreateUser(ctx, model.UserModel{
+func (s *InterfaceService) TeacherRegister(ctx context.Context, req *iv1.UserRegisterReq) (*iv1.UserReply, error) {
+	err := s.userCase.CreateUser(ctx, model.UserModel{
 		Name:     req.Name,
 		Phone:    req.Phone,
 		Password: req.Password,
@@ -64,8 +50,8 @@ func (s *UserService) TeacherRegister(ctx context.Context, req *iv1.UserRegister
 	return &iv1.UserReply{Message: "register successful!"}, nil
 
 }
-func (s *UserService) StudentRegister(ctx context.Context, req *iv1.UserRegisterReq) (*iv1.UserReply, error) {
-	err := s.uc.CreateUser(ctx, model.UserModel{
+func (s *InterfaceService) StudentRegister(ctx context.Context, req *iv1.UserRegisterReq) (*iv1.UserReply, error) {
+	err := s.userCase.CreateUser(ctx, model.UserModel{
 		Name:     req.Name,
 		Phone:    req.Phone,
 		Password: req.Password,
@@ -75,9 +61,9 @@ func (s *UserService) StudentRegister(ctx context.Context, req *iv1.UserRegister
 	}
 	return &iv1.UserReply{Message: "register successful!"}, nil
 }
-func (s *UserService) UserInfo(ctx context.Context, req *iv1.UserReq) (*iv1.UserInfoReply, error) {
+func (s *InterfaceService) UserInfo(ctx context.Context, req *iv1.UserReq) (*iv1.UserInfoReply, error) {
 
-	info, err := s.uc.GetInfo(ctx, req.Id)
+	info, err := s.userCase.GetInfo(ctx, req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -90,15 +76,15 @@ func (s *UserService) UserInfo(ctx context.Context, req *iv1.UserReq) (*iv1.User
 		Id:        info.Id,
 	}, nil
 }
-func (s *UserService) DeleteUser(ctx context.Context, req *iv1.UserReq) (*iv1.UserReply, error) {
-	err := s.uc.DeleteUser(ctx, req.Id)
+func (s *InterfaceService) DeleteUser(ctx context.Context, req *iv1.UserReq) (*iv1.UserReply, error) {
+	err := s.userCase.DeleteUser(ctx, req.Id)
 	if err != nil {
 		return nil, err
 	}
 	return &iv1.UserReply{Message: "delete successful!"}, nil
 }
-func (s *UserService) UpdateUser(ctx context.Context, req *iv1.UpdateUserReq) (*iv1.UserReply, error) {
-	err := s.uc.UpdateUser(ctx, model.UserModel{
+func (s *InterfaceService) UpdateUser(ctx context.Context, req *iv1.UpdateUserReq) (*iv1.UserReply, error) {
+	err := s.userCase.UpdateUser(ctx, model.UserModel{
 		Name:     req.Name,
 		Phone:    req.Phone,
 		Password: req.Password,

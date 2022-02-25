@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	cgv1 "education/api/v1/course"
 	userv1 "education/api/v1/user"
 	"education/app/interface/internal/conf"
 	"fmt"
@@ -23,14 +24,15 @@ var ProviderSet = wire.NewSet(NewData, NewDiscovery, NewUserRepo, NewUserClient)
 
 // Data .
 type Data struct {
-	userClient userv1.UserClient
+	userClient   userv1.UserClient
+	courseClient cgv1.CourseClient
 }
 
 // NewData .
-func NewData(c *conf.AppConfig, userClient userv1.UserClient) (*Data, func(), error) {
-	//myLog := log.NewHelper(log.With(logger, "module", "data"))
+func NewData(c *conf.AppConfig, userClient userv1.UserClient, courseClient cgv1.CourseClient) (*Data, func(), error) {
 	data := Data{
-		userClient: userClient,
+		userClient:   userClient,
+		courseClient: courseClient,
 	}
 	cleanup := func() {
 		fmt.Println("closing!")
@@ -58,6 +60,25 @@ func NewUserClient(discover registry.Discovery, conf *conf.AppConfig) userv1.Use
 	return c
 }
 
+func NewCourseClient(discover registry.Discovery, conf *conf.AppConfig) cgv1.CourseClient {
+	conn, err := grpc.DialInsecure(
+		context.Background(),
+		grpc.WithEndpoint("discovery:///education.select.course"),
+		grpc.WithDiscovery(discover),
+		grpc.WithMiddleware(
+			tracing.Server(),
+			recovery.Recovery(),
+			jwt.Client(func(token *jwt2.Token) (interface{}, error) {
+				return []byte(conf.Auth.ServiceKey), nil
+			}, jwt.WithSigningMethod(jwt2.SigningMethodHS256)),
+		),
+	)
+	if err != nil {
+		panic(err)
+	}
+	c := cgv1.NewCourseClient(conn)
+	return c
+}
 func NewDiscovery(conf *conf.AppConfig) registry.Discovery {
 	apiConfig := consulApi.DefaultConfig()
 	if conf.Consul.Address != "" {

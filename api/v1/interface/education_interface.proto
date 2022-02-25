@@ -1,0 +1,334 @@
+syntax = "proto3";
+
+package education.api.v1.education_interface;
+import "google/api/annotations.proto";
+//import "api/v1/interface/course/course.proto";
+//import "api/v1/interface/user/user.proto";
+//import "api/v1/interface/common/common.proto";
+option go_package = "education/api/v1/education_interface";
+
+
+service EducationInterface {
+  rpc LogIn (UserLogInReq) returns (LogInReply)  {
+    option (google.api.http) = {
+      post: "/login"
+      body:"*"
+    };
+  }
+  rpc AdminRegister (UserRegisterReq) returns (UserReply){
+    option(google.api.http) = {
+      post: "/register/admin"
+      body:"*"
+    };
+  }
+
+  rpc TeacherRegister (UserRegisterReq) returns (UserReply){
+    option(google.api.http) = {
+      post: "/register/teacher"
+      body:"*"
+    };
+  }
+  rpc StudentRegister (UserRegisterReq) returns (UserReply){
+    option(google.api.http) = {
+      post: "/register/student"
+      body:"*"
+    };
+  }
+  rpc UserInfo (UserReq) returns (UserInfoReply){
+    option(google.api.http) = {
+      get:"/user/{id}"
+    };
+  }
+  rpc DeleteUser(UserReq) returns (UserReply){
+    option(google.api.http)={
+      delete:"/user/{id}"
+    };
+  }
+  rpc UpdateUser(UpdateUserReq) returns (UserReply){
+    option(google.api.http)={
+      put:"/user/{id}"
+      body:"*"
+    };
+  }
+  //course
+  rpc  CreateCourse(CreateCourseReq) returns (Reply)  {
+    option(google.api.http)={
+      post:"/course"
+      body:"*"
+    };
+  }
+  rpc  SaveCourse(UpdateCourseReq) returns (Reply)  {
+    option(google.api.http)={
+      put:"/course/{id}"
+      body:"*"
+    };
+  }
+  rpc  DeleteCourse(DeleteCourseReq) returns (Reply)  {
+    option(google.api.http)={
+      delete:"/course/{id}"
+    };
+  }
+  rpc  GetCourse(CourseReq) returns (CourseInfo)  {
+    option(google.api.http)={
+      get:"/course/{id}"
+    };
+  }
+  rpc  GetCourseListByTeacherId(CourseReq) returns (CourseListReply){
+    option(google.api.http)={
+      get:"/course/list/teacher/{id}"
+    };
+  }
+  rpc  SetSelective(SetSelectiveReq) returns (Reply) {
+
+    option(google.api.http)={
+      post:"/course/selective/{curriculum_id}"
+      body:"*"
+    };
+  }
+  rpc  DeleteSelect(DeleteSelectReq) returns (Reply){
+
+    option(google.api.http)={
+      delete:"/select/{id}"
+    };
+  }
+  rpc  CreateSelect(CreateSelectReq) returns (Reply){
+
+    option(google.api.http)={
+      post:"/select"
+      body:"*"
+    };
+  }
+  rpc  GetSelect(GetSelectReq) returns (SelectReply) {
+
+    option(google.api.http)={
+      get:"/select/{id}"
+    };
+  }
+  rpc  GetCourseListSelect(ListSelectReq) returns (ListSelectReply){
+
+    option(google.api.http)={
+      get:"/select/curriculum/{curriculum_id}"
+    };
+  }
+  rpc  SetGrade(GradeReq) returns (Reply){
+
+    option(google.api.http)={
+      post:"/grade"
+      body:"*"
+    };
+  }
+  rpc  UpdateGrade(GradeUpdateReq) returns (Reply){
+
+    option(google.api.http)={
+      put:"/grade/{grade_id}"
+      body:"*"
+    };
+  }
+  rpc  GetGradeByCurriculum(SingleGradeReq) returns (SingleGradeReply){
+
+    option(google.api.http)={
+      post:"/grade/list/curriculum"
+      body:"*"
+    };
+  }
+  rpc  GetPeriodListGradeByOneTerm(ListPeriodGradeReq) returns (ListGradeReply) {
+
+    option(google.api.http)={
+      post:"/grade/list/term"
+      body:"*"
+    };
+  }
+  rpc  GetGroupListGradeByCurriculum(ListGroupGradeReq) returns (ListGradeReply) {
+
+    option(google.api.http)={
+      post:"/grade/list/group"
+      body:"*"
+    };
+  }
+}
+
+// common
+message Reply{
+  string message =1;
+}
+
+// select
+message SetSelectiveReq{
+  uint64  id =1;
+  uint64  curriculum_id =2;
+}
+message CreateSelectReq{
+  uint64 curriculum_id=1;
+  uint64 group_id =2;
+  uint64 student_id=3;
+}
+message DeleteSelectReq{
+  uint64 id=1;
+}
+message GetSelectReq{
+  uint64 id=1;
+}
+message SelectReply{
+  uint64 id=1;
+  uint64 curriculum_id=2;
+  uint64 group_id=3;
+  uint64 student_id=4;
+  string curriculum_name=5;
+  string group_name=6;
+  string student_name=7;
+}
+message ListSelectReq{
+  uint64 curriculum_id=1;
+}
+message ListSelectReply{
+  repeated SelectReply list=1;
+}
+//grade
+message GradeReq{
+  uint64  student_id=1;
+  uint64 curriculum_id=2;
+  int32 score=3;
+  string study_level=4;
+  int32 grade_point=5;
+  string note=6;
+  int32 grade_year=7;
+  int32 term =8;  // 1,2
+}
+
+message GradeUpdateReq{
+  uint64  grade_id=9;
+  uint64  student_id=1;
+  uint64 curriculum_id=2;
+  int32 score=3;
+  string study_level=4;
+  int32 grade_point=5;
+  string note=6;
+  int32 grade_year=7;
+  int32 term =8;  // 1,2
+}
+
+message SingleGradeReq{
+  uint64 curriculum_id=1;
+  uint64 student_id=2;
+  int32 grade_year=3;
+  int32 term =4;  // 1,2
+}
+
+message SingleGradeReply{
+  uint64 id=1;
+  uint64 curriculum_id=2;
+  string curriculum_name=3;
+  int32  credit=4;
+  string category=5;
+  string exam_way=6;
+  string study_level=7;
+  int32   score=8;
+  int32   gain_credit=9;
+  int32   grade_point=10;
+  string   note = 11;
+  string student_name=12;
+  uint64 student_id =13;
+}
+message ListPeriodGradeReq{
+  uint64 student_id=2;
+  int32 grade_year=3;
+  int32 term =4;  // 1,2
+}
+
+message ListGroupGradeReq{
+  uint64 group_id=1;
+  uint64 curriculum_id=2;
+  int32 grade_year=3;
+  int32 term =4;  // 1,2
+}
+message ListGradeReply{
+  repeated SingleGradeReply list=1;
+}
+
+// course
+message CourseReq{
+  uint64 id =1 ;
+}
+message CourseInfo{
+  uint64 id =1;
+  uint64 classroom_id=2;
+  string classroom_name=12;
+  uint64 teacher_id=10;
+  uint64 teacher_name=13;
+  string name=11;
+  int32 grade_year=3;
+  int32 term=4;
+  int32  credit=5;
+  int32 school_hour=6;
+  string category=7;
+  int32 status=8;
+  string exam_way=9;
+}
+message CourseListReply{
+  repeated CourseInfo list=1;
+}
+message CreateCourseReq{
+  uint64 classroom_id=2;
+  uint64 teacher_id=10;
+  string name=11;
+  int32 grade_year=3;
+  int32 term=4;
+  int32  credit=5;
+  int32 school_hour=6;
+  string category=7;
+  string exam_way=9;
+}
+
+message DeleteCourseReq{
+  uint64 id=1;
+}
+message UpdateCourseReq{
+  uint64 id =1;
+  uint64 classroom_id=2;
+  uint64 teacher_id=10;
+  string name=11;
+  int32 grade_year=3;
+  int32 term=4;
+  int32  credit=5;
+  int32 school_hour=6;
+  string category=7;
+  int32 status=8;
+  string exam_way=9;
+}
+
+message LogInReply{
+  int32 id=1;
+  string token=2;
+}
+
+message UserInfoReply{
+  string name = 1;
+  string phone = 2;
+  bool is_admin=3;
+  bool is_teacher=4;
+  bool is_student=5;
+  int32  id =7;
+}
+
+message UserReq{
+  int32 id = 1;
+}
+
+message UserLogInReq {
+  string phone =1;
+  string password =2;
+}
+message UserRegisterReq{
+  string name = 1;
+  string phone =2;
+  string password =3;
+}
+message UserReply{
+  string message =1;
+}
+message UpdateUserReq{
+  int32  id = 1;
+  string name = 2;
+  string password =3;
+  string phone = 4;
+}
