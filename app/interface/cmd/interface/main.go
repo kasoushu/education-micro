@@ -12,6 +12,12 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/sdk/resource"
+	"go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
@@ -74,11 +80,7 @@ func main() {
 		panic(err)
 	}
 	// init tracing
-	pkg.SetTracerProvider(pkg.JaegerConfig{
-		Name: Name,
-		Url:  appConfig.Jaeger.Address,
-		ID:   id,
-	}, logger)
+	SetTracerProvider(appConfig.Jaeger.Address, logger)
 	app, cleanup, err := initApp(&appConfig, logger)
 	if err != nil {
 		panic(err)
@@ -88,4 +90,24 @@ func main() {
 	if err := app.Run(); err != nil {
 		panic(err)
 	}
+}
+func SetTracerProvider(c string, logger log.Logger) {
+	// Create the Jaeger exporter
+	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(c)))
+	if err != nil {
+		panic(err)
+	}
+	tp := trace.NewTracerProvider(
+		// Always be sure to batch in production.
+		trace.WithBatcher(exp),
+		// Record information about this application in an Resource.
+		trace.WithResource(resource.NewWithAttributes(
+			semconv.SchemaURL,
+			semconv.ServiceNameKey.String(Name),
+			//attribute.String("environment", en),
+			attribute.String("UUID", id),
+		)),
+	)
+	log.NewHelper(logger).Info("jaeger init successful!")
+	otel.SetTracerProvider(tp)
 }

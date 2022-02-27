@@ -3,7 +3,7 @@ server:
     addr: 0.0.0.0:8000
     timeout: 1s
   grpc:
-    addr: 0.0.0.0:9001
+    addr: 0.0.0.0:9000
     timeout: 1s
 data:
   database:
@@ -18,7 +18,8 @@ consul:
   scheme: http
 
 jaeger:
-  address: http://localhost:14268/api/traces
+#  address: http://localhost:14268/api/traces
+  address: http://choucaicai.top:14268/api/traces
 auth:
   service_key: "education-demo"
   api_key: "education demo api key"

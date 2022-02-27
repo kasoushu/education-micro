@@ -1,15 +1,15 @@
 server:
-  http:
-    addr: 0.0.0.0:8000
-    timeout: 1s
+#  http:
+#    addr: 0.0.0.0:8000
+#    timeout: 1s
   grpc:
-    addr: 0.0.0.0:9000
+    addr: 0.0.0.0:9002
     timeout: 1s
 data:
   database:
     driver: mysql
-    source: root:0026@tcp(localhost:3308)/education?parseTime=true
-#    source: root:0026@tcp(choucaicai.top:3308)/education?parseTime=true
+#    source: root:0026@tcp(localhost:3308)/education?parseTime=true
+    source: root:0026@tcp(choucaicai.top:3308)/education?parseTime=true
   redis:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
@@ -19,6 +19,7 @@ consul:
   scheme: http
 
 jaeger:
-  address: http://localhost:14268/api/traces
+#  address: http://localhost:14268/api/traces
+  address: http://choucaicai.top:14268/api/traces
 auth:
   service_key: "education-demo"
